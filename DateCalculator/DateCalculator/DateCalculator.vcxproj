@@ -184,7 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DateArith.h" />
-    <ClInclude Include="DateCalculator.h" />
+    <ClInclude Include="DateCalculator.hpp" />
     <ClInclude Include="DateCalculatorApp.h" />
     <ClInclude Include="DateCalculatorDlg.h" />
     <ClInclude Include="DateDiff.h" />

@@ -2,7 +2,7 @@
 //
 
 #include "pch.h"
-#include "DateCalculator.h"
+#include "DateCalculator.hpp"
 #include "afxdialogex.h"
 #include "DateArith.h"
 #include "resource.h"
