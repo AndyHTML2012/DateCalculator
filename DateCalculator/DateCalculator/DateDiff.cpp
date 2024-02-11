@@ -54,6 +54,9 @@ static std::wstring GetDateDifference(CDateTimeCtrl* fromDateCtrl, CDateTimeCtrl
 	CTime dateInfo;
 
 	fromDateCtrl->GetTime(dateInfo);
+
+	// FIXME: CTime GetYear will break if you go past 1970
+
 	int year = dateInfo.GetYear();
 	DateCalculator::MONTH month = static_cast<DateCalculator::MONTH>(dateInfo.GetMonth());
 	int day = dateInfo.GetDay();

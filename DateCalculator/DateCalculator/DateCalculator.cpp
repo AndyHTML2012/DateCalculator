@@ -119,9 +119,9 @@ namespace DateCalculator
         return this->day_;
     }
 
-    unsigned int Date::getDaysFromMinimum() const
+    UINT32 Date::getDaysFromMinimum() const
     {
-        unsigned int days = 0;
+        UINT32 days = 0;
 
         // Add the number of days for each year up to the given year
         for (int year = MINIMUM_YEAR; year < this->year_; ++year) {
@@ -151,14 +151,16 @@ namespace DateCalculator
     // Get string data of the day, month, year difference between two dates
     std::string operator-(Date const& lhs, Date const& rhs)
     {
-        unsigned int dayDiff = 0;
+        UINT32 dayDiff = 0;
         unsigned int monthDiff = 0;
         unsigned int yearDiff = 0;
 
         // DETERMINE WHICH YEAR COMES BEFORE AND COMES AFTER USING > OPERATOR
         if (lhs > rhs)
         {
-            dayDiff = ( lhs.getDaysFromMinimum() - rhs.getDaysFromMinimum() );
+            UINT32 f1 = lhs.getDaysFromMinimum();
+            UINT32 f2 = rhs.getDaysFromMinimum();
+            dayDiff = (f1 - f2);
         }
         else if (rhs > lhs)
         {
@@ -168,13 +170,6 @@ namespace DateCalculator
         {
             dayDiff = 0;
         }
-
-        // ONCE DETERMINED, GET TOTAL DAYS THAT DATE IS FROM THE MINIMUM YEAR, MONTH, AND DAY
-
-        // RETURN TOTAL DAYS FROM THAT DAY
-
-
-        
 
         // Return the difference
         std::string dateDifference = "Years: " + std::to_string(yearDiff) +

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint> // UINT32 incase platform only supports 
 
 #define MINIMUM_YEAR 1601
 
@@ -40,7 +41,7 @@ namespace DateCalculator
         unsigned int GetDay() const;
 
         // gets days from minimum year (january 1st of that year).
-        unsigned int getDaysFromMinimum() const;
+        UINT32 getDaysFromMinimum() const;
 
         // Add one date to another to get another date
         friend Date operator+(Date const& arg1, Date const& arg2);
