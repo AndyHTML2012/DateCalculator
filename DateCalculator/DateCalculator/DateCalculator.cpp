@@ -144,12 +144,12 @@ namespace DateCalculator
         UINT32 days = 0;
 
         // Add the number of days for each year up to the given year
-        for (int year = MINIMUM_YEAR; year < this->year_; ++year) {
+        for (unsigned int year = MINIMUM_YEAR; year < this->year_; ++year) {
             days += year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) ? 366 : 365;
         }
 
         // Add the number of days for each month up to the given month in the given year
-        for (int month = 1; month < this->month_; ++month) {
+        for (unsigned int month = 1; month < this->month_; ++month) {
             days += this->daysInMonth;
         }
 

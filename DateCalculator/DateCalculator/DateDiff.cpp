@@ -91,14 +91,14 @@ static std::wstring GetDateDifference(COleDateTime fromDateCtrl, COleDateTime to
 	return dateDiffOutput;
 }
 
-void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult)
+/*!**************************************************************************************
+ * @brief					Calculate & Update Date difference output
+ * @param fromDateCtrl
+ * @param toDateCtrl 
+ * @param DiffDateOutput 
+****************************************************************************************/
+static void UpdateDiffOutput(CDateTimeCtrl* fromDateCtrl, CDateTimeCtrl* toDateCtrl, CStatic* DiffDateOutput)
 {
-	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-
-	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
-	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
-	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
-
 	if (fromDateCtrl != NULL && toDateCtrl != NULL)
 	{
 		COleDateTime fromDateInfo;
@@ -116,7 +116,17 @@ void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult
 			}
 		}
 	}
+}
 
+void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
+
+	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
+	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
+	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
+
+	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);
 	*pResult = 0;
 }
 
@@ -129,24 +139,7 @@ void DateDiff::OnDtnDatetimechangeTodatePicker(NMHDR* pNMHDR, LRESULT* pResult)
 	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
 	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
 
-	if (fromDateCtrl != NULL && toDateCtrl != NULL)
-	{
-		COleDateTime fromDateInfo;
-		COleDateTime toDateInfo;
-
-		if (fromDateCtrl->GetTime(fromDateInfo) && toDateCtrl->GetTime(toDateInfo))
-		{
-			if (fromDateInfo.GetStatus() == COleDateTime::valid &&
-				toDateInfo.GetStatus() == COleDateTime::valid)
-			{
-				// calc & change date difference output
-				std::wstring diffOutputString = GetDateDifference(fromDateInfo, toDateInfo);
-				LPCTSTR OUTPUT_DIFFERENCE = diffOutputString.c_str();
-				DiffDateOutput->SetWindowTextW(OUTPUT_DIFFERENCE);
-			}
-		}
-	}
-
+	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);
 	*pResult = 0;
 }
 
