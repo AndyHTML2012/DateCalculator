@@ -32,6 +32,9 @@
 #define IDC_DIFFERENCEDATE_TEXT         1037
 #define IDC_DATEDIFF_OUTPUT             1037
 #define IDC_DATEARITH_OUTPUT            1038
+#define IDC_NOTE1                       1039
+#define IDC_LABEL2                      1040
+#define IDC_NOTE2                       1040
 #define ID_FILE_EXIT                    32771
 #define ID_HELP_ABOUT                   32772
 
@@ -41,7 +44,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1039
+#define _APS_NEXT_CONTROL_VALUE         1041
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
