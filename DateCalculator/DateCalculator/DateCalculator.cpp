@@ -3,19 +3,22 @@
 #include "DateCalculator.hpp"
 #include <iostream>
 
-static bool Is_LeapYear(unsigned int year)
+static bool Is_LeapYear(unsigned int year);
+
+/*!****************************************************************************
+ * @brief           Exit function and set print error to console.
+ * @param errorMsg  Message to print (automatic newline handled by function)
+******************************************************************************/
+static void ThrowError(std::string errorMsg)
 {
-    if (year % 4 != 0) {
-        return false;
+    try
+    {
+        throw std::invalid_argument(errorMsg);
     }
-    else if (year % 100 != 0) {
-        return true;
-    }
-    else if (year % 400 != 0) {
-        return false;
-    }
-    else {
-        return true;
+    catch (const std::exception&)
+    {
+        std::cout << __FILE__ << ": " << errorMsg << std::endl;
+        return;
     }
 }
 
@@ -34,63 +37,78 @@ namespace DateCalculator
                 switch (month)
                 {
                 case JAN:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 case FEB:
                 {
                     if (this->isLeapYear == true) {
-                        if (day > 29) { throw std::invalid_argument("Invalid day for month."); }
+                        if (day > 29) { ThrowError("Invalid day for month."); }
                         this->daysInMonth = 29;
                     }
                     else {
-                        if (day > 28) { throw std::invalid_argument("Invalid day for month."); }
+                        if (day > 28) { ThrowError("Invalid day for month."); }
                         this->daysInMonth = 28;
                     }
                     break;
                 }
                 case MAR:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 case APR:
-                    if (day > 30) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 30) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 30;
                     break;
                 case MAY:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 case JNE:
-                    if (day > 30) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 30) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 30;
                     break;
                 case JLY:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 case AUG:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 case SEP:
-                    if (day > 30) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 30) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 30;
                     break;
                 case OCT:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 case NOV:
-                    if (day > 30) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 30) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 30;
                     break;
                 case DEC:
-                    if (day > 31) { throw std::invalid_argument("Invalid day for month."); }
+                    if (day > 31) { ThrowError("Invalid day for month."); }
                     this->daysInMonth = 31;
                     break;
                 default:
                     break;
+                }
+
+                // Handle gregorian removed dates in 1752
+                if (year == 1752 && month == SEP)
+                {
+                    if (day > 2 && day < 14)
+                    {
+                        this->year_ = 0;
+                        ThrowError("Date does not exist on gregorian calendar.");
+                        return;
+                    }
+                    else
+                    {
+                        this->daysInMonth = 19;
+                    }
                 }
 
                 // If all checks pass, the date is valid
@@ -99,8 +117,10 @@ namespace DateCalculator
                 this->day_ = day;
             }
         }
-        else {
-            throw std::invalid_argument("Invalid year entered.");
+        else 
+        {
+            ThrowError("Invalid year entered.");
+            return;
         }
     }
 
@@ -155,16 +175,17 @@ namespace DateCalculator
         unsigned int monthDiff = 0;
         unsigned int yearDiff = 0;
 
+        UINT32 d1 = lhs.getDaysFromMinimum();
+        UINT32 d2 = rhs.getDaysFromMinimum();
+
         // DETERMINE WHICH YEAR COMES BEFORE AND COMES AFTER USING > OPERATOR
         if (lhs > rhs)
         {
-            UINT32 f1 = lhs.getDaysFromMinimum();
-            UINT32 f2 = rhs.getDaysFromMinimum();
-            dayDiff = (f1 - f2);
+            dayDiff = (d1 - d2);
         }
         else if (rhs > lhs)
         {
-            dayDiff = (rhs.getDaysFromMinimum() - lhs.getDaysFromMinimum());
+            dayDiff = (d2 - d1);
         }
         else
         {
@@ -207,5 +228,28 @@ namespace DateCalculator
     bool operator==(Date const& lhs, Date const& rhs)
     {
         return false;
+    }
+}
+
+static bool Is_LeapYear(unsigned int year)
+{
+    if (year % 4 == 0)
+    {
+        if (year % 100 == 0)
+        {
+            if (year % 400 == 0)
+            {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+    else {
+        return true;
     }
 }

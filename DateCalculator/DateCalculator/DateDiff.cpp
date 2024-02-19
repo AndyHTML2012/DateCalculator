@@ -47,28 +47,45 @@ void DateDiff::OnSize(UINT nType, int cx, int cy)
 	CDialogEx::OnSize(nType, cx, cy);
 }
 
-static std::wstring GetDateDifference(CDateTimeCtrl* fromDateCtrl, CDateTimeCtrl* toDateCtrl)
+/*!**************************************************************************************
+ * @brief				Get wString difference between two inputed dates from MFC GUI.
+ * @param fromDateCtrl	COleDateTime ctrl of past date.
+ * @param toDateCtrl	COleDateTime ctrl of future date.
+ * @return				wstring of date difference.
+****************************************************************************************/
+static std::wstring GetDateDifference(COleDateTime fromDateCtrl, COleDateTime toDateCtrl)
 {
-	std::string dateDiff = "Homies Be Balling";
+	std::string dateDiff = "foo";
 
-	CTime dateInfo;
+	unsigned int day = 0;
+	unsigned int int_month = 0;
+	unsigned int year = 0;
 
-	fromDateCtrl->GetTime(dateInfo);
+	// Get fromDate
+	year = fromDateCtrl.GetYear();
+	int_month = fromDateCtrl.GetMonth();
+	day = fromDateCtrl.GetDay();
 
-	// FIXME: CTime GetYear will break if you go past 1970
-
-	int year = dateInfo.GetYear();
-	DateCalculator::MONTH month = static_cast<DateCalculator::MONTH>(dateInfo.GetMonth());
-	int day = dateInfo.GetDay();
+	DateCalculator::MONTH month = static_cast<DateCalculator::MONTH>(int_month);
 	DateCalculator::Date from_Date(month, day, year);
 
-	toDateCtrl->GetTime(dateInfo);
-	year = dateInfo.GetYear();
-	month = static_cast<DateCalculator::MONTH>(dateInfo.GetMonth());
-	day = dateInfo.GetDay();
+	// Get toDate
+	year = toDateCtrl.GetYear();
+	int_month = toDateCtrl.GetMonth();
+	day = toDateCtrl.GetDay();
+
+	month = static_cast<DateCalculator::MONTH>(int_month);
 	DateCalculator::Date to_Date(month, day, year);
 
-	dateDiff = from_Date - to_Date;
+	if (from_Date.GetYear() == 0 || to_Date.GetYear() == 0)
+	{
+		dateDiff = "Date does not exist.";
+	}
+	else
+	{
+		// Get Date Difference
+		dateDiff = from_Date - to_Date;
+	}
 
 	std::wstring dateDiffOutput(dateDiff.begin(), dateDiff.end());
 	return dateDiffOutput;
@@ -78,15 +95,27 @@ void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 
-	// calc & change date difference output
 	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
 	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
 	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
 
-	std::wstring diffOutputString = GetDateDifference(fromDateCtrl, toDateCtrl);
-	LPCTSTR OUTPUT_DIFFERENCE = diffOutputString.c_str();
+	if (fromDateCtrl != NULL && toDateCtrl != NULL)
+	{
+		COleDateTime fromDateInfo;
+		COleDateTime toDateInfo;
 
-	DiffDateOutput->SetWindowTextW(OUTPUT_DIFFERENCE);
+		if (fromDateCtrl->GetTime(fromDateInfo) && toDateCtrl->GetTime(toDateInfo))
+		{
+			if (fromDateInfo.GetStatus() == COleDateTime::valid &&
+				toDateInfo.GetStatus() == COleDateTime::valid)
+			{
+				// calc & change date difference output
+				std::wstring diffOutputString = GetDateDifference(fromDateInfo, toDateInfo);
+				LPCTSTR OUTPUT_DIFFERENCE = diffOutputString.c_str();
+				DiffDateOutput->SetWindowTextW(OUTPUT_DIFFERENCE);
+			}
+		}
+	}
 
 	*pResult = 0;
 }
@@ -96,15 +125,36 @@ void DateDiff::OnDtnDatetimechangeTodatePicker(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 
-	// calc & change date difference output
 	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
 	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
 	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
 
-	std::wstring diffOutputString = GetDateDifference(fromDateCtrl, toDateCtrl);
-	LPCTSTR OUTPUT_DIFFERENCE = diffOutputString.c_str();
+	if (fromDateCtrl != NULL && toDateCtrl != NULL)
+	{
+		COleDateTime fromDateInfo;
+		COleDateTime toDateInfo;
 
-	DiffDateOutput->SetWindowTextW(OUTPUT_DIFFERENCE);
+		if (fromDateCtrl->GetTime(fromDateInfo) && toDateCtrl->GetTime(toDateInfo))
+		{
+			if (fromDateInfo.GetStatus() == COleDateTime::valid &&
+				toDateInfo.GetStatus() == COleDateTime::valid)
+			{
+				// calc & change date difference output
+				std::wstring diffOutputString = GetDateDifference(fromDateInfo, toDateInfo);
+				LPCTSTR OUTPUT_DIFFERENCE = diffOutputString.c_str();
+				DiffDateOutput->SetWindowTextW(OUTPUT_DIFFERENCE);
+			}
+		}
+	}
 
 	*pResult = 0;
+}
+
+
+BOOL DateDiff::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

@@ -106,8 +106,6 @@ BOOL CDateCalculatorDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
-	// TODO: Add extra initialization here
-
 	// Disable resizing when hovering over window frame
 	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_SIZEBOX);
 
@@ -119,24 +117,20 @@ BOOL CDateCalculatorDlg::OnInitDialog()
 	CTabCtrl* pTabCtrl2 = (CTabCtrl*)GetDlgItem(IDC_TAB1);
 	m_tab2.Create(IDD_TAB2, pTabCtrl2);
 
-
 	TCITEM item1, item2;
 	item1.mask = TCIF_TEXT | TCIF_PARAM;
 	item1.lParam = (LPARAM)&m_tab1;
 	item1.pszText = _T("Date Difference Calculator");
 	pTabCtrl->InsertItem(0, &item1);
 
-
 	item2.mask = TCIF_TEXT | TCIF_PARAM;
 	item2.lParam = (LPARAM)&m_tab2;
 	item2.pszText = _T("Date Arithmetic Calculator");
 	pTabCtrl2->InsertItem(1, &item2);
 
-
 	CRect rcItem;
 	pTabCtrl->GetItemRect(0, &rcItem);
 	m_tab1.SetWindowPos(NULL, rcItem.left, rcItem.bottom + 1, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-
 
 	CRect rcItem2;
 	pTabCtrl2->GetItemRect(0, &rcItem2);
@@ -144,6 +138,9 @@ BOOL CDateCalculatorDlg::OnInitDialog()
 
 	m_tab1.ShowWindow(SW_SHOW);
 	m_tab2.ShowWindow(SW_HIDE);
+
+	// Initialize date controls
+
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
