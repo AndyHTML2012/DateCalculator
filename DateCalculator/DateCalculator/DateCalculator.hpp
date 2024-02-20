@@ -34,7 +34,7 @@ namespace DateCalculator
         unsigned int daysInMonth = 31;
 
     public:
-        Date(MONTH month, unsigned int day, unsigned int year);
+        Date(MONTH month = JAN, unsigned int day = 1, unsigned int year = 1970);
 
         unsigned int GetYear() const;
         MONTH GetMonth() const;
@@ -43,10 +43,8 @@ namespace DateCalculator
         // gets days from minimum year (january 1st of that year).
         UINT32 getDaysFromMinimum() const;
 
-        // Add one date to another to get another date
-        friend Date operator+(Date const& arg1, Date const& arg2);
-
         // Subtract one date from another to get a new date
+        // Returns: formatted string of day, month, and year difference between both dates
         friend std::string operator-(Date const& lhs, Date const& rhs);
 
         // Does lhs date come after rhs date?
@@ -54,5 +52,9 @@ namespace DateCalculator
 
         // Is date1 == date2 ?
         friend bool operator==(Date const& lhs, Date const& rhs);
+
+        void AddYear(unsigned int yearsToAdd);      // add years to date
+        void AddMonth(unsigned int monthsToAdd);    // add months to date
+        void AddDay(unsigned int daysToAdd);        // add days to date
     };
 }

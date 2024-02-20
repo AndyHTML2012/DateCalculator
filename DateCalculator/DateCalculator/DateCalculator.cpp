@@ -24,7 +24,7 @@ static void ThrowError(std::string errorMsg)
 
 namespace DateCalculator
 {
-    // (month, day, year)
+    // Create a date: (month, day, year), default date is January 1st, 1970
     Date::Date(MONTH month, unsigned int day, unsigned int year)
     {
         if (year >= MINIMUM_YEAR)
@@ -159,15 +159,6 @@ namespace DateCalculator
         return days;
     }
 
-    // Add one date to another to get another date
-    Date operator+(Date const& arg1, Date const& arg2)
-    {
-        UNREFERENCED_PARAMETER(arg1);
-        UNREFERENCED_PARAMETER(arg2);
-        Date newDate(JAN, 1, 1601);
-        return newDate;
-    }
-
     // Get string data of the day, month, year difference between two dates
     std::string operator-(Date const& lhs, Date const& rhs)
     {
@@ -227,7 +218,34 @@ namespace DateCalculator
 
     bool operator==(Date const& lhs, Date const& rhs)
     {
+        if (lhs.year_ == rhs.year_ &&
+            lhs.isLeapYear == rhs.isLeapYear &&
+            lhs.daysInMonth == rhs.daysInMonth)
+        {
+            if (lhs.month_ == rhs.month_)
+            {
+                if (lhs.day_ == rhs.day_)
+                {
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    void Date::AddYear(unsigned int yearsToAdd)
+    {
+
+    }
+
+    void Date::AddMonth(unsigned int monthsToAdd)
+    {
+
+    }
+
+    void Date::AddDay(unsigned int daysToAdd)
+    {
+
     }
 }
 

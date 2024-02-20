@@ -7,7 +7,6 @@
 #include "DateArith.h"
 #include "resource.h"
 
-
 // DateArith dialog
 
 IMPLEMENT_DYNAMIC(DateArith, CDialogEx)
@@ -15,7 +14,10 @@ IMPLEMENT_DYNAMIC(DateArith, CDialogEx)
 DateArith::DateArith(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_TAB2, pParent)
 {
-
+	this->currentOperation_ = NONE;
+	this->days_ = 0;
+	this->months_ = 0;
+	this->years_ = 0;
 }
 
 DateArith::~DateArith()
@@ -52,46 +54,49 @@ static void UpdateArithOutputLabel(CStatic* arithOutputCtrl)
 
 void DateArith::OnBnClickedAddOperation()
 {
-	// TODO: Add your control notification handler code here
+	currentOperation_ = ADD;
 }
 
 
 void DateArith::OnBnClickedSubtractOperation()
 {
-	// TODO: Add your control notification handler code here
+	currentOperation_ = SUBTRACT;
 }
 
 
 void DateArith::OnEnChangeYearsfrom()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
+	// get inputed year text
+	CEdit* yearArithCtrl = (CEdit*)GetDlgItem(IDC_YEARSFROM);
+	CString yearsCtrltxt;
+	yearArithCtrl->GetWindowTextW(yearsCtrltxt);
 
-	// TODO:  Add your control notification handler code here
+	// convert text to unsigned int
+	this->years_ = _tstoi(yearsCtrltxt.GetString());
 }
 
 
 void DateArith::OnEnChangeMonthsfrom()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
+	// get inputed month text
+	CEdit* monthArithCtrl = (CEdit*)GetDlgItem(IDC_MONTHSFROM);
+	CString monthsCtrltxt;
+	monthArithCtrl->GetWindowTextW(monthsCtrltxt);
 
-	// TODO:  Add your control notification handler code here
+	// convert text to unsigned int
+	this->months_ = _tstoi(monthsCtrltxt.GetString());
 }
 
 
 void DateArith::OnEnChangeDaysfrom()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
+	// get inputed day text
+	CEdit* dayArithCtrl = (CEdit*)GetDlgItem(IDC_DAYSFROM);
+	CString daysCtrltxt;
+	dayArithCtrl->GetWindowTextW(daysCtrltxt);
 
-	// TODO:  Add your control notification handler code here
+	// convert text to unsigned int
+	this->days_ = _tstoi(daysCtrltxt.GetString());
 }
 
 
