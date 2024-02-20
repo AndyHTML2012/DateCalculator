@@ -35,6 +35,8 @@
 #define IDC_NOTE1                       1039
 #define IDC_LABEL2                      1040
 #define IDC_NOTE2                       1040
+#define IDC_BUTTON1                     1041
+#define IDC_DIFFCALC_BUTTON             1041
 #define ID_FILE_EXIT                    32771
 #define ID_HELP_ABOUT                   32772
 
@@ -44,7 +46,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1041
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

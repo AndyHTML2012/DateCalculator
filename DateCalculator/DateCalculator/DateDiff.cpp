@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(DateDiff, CDialogEx)
 	ON_WM_SIZE()
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_FROMDATE_PICKER, &DateDiff::OnDtnDatetimechangeFromdatePicker)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TODATE_PICKER, &DateDiff::OnDtnDatetimechangeTodatePicker)
+	ON_BN_CLICKED(IDC_DIFFCALC_BUTTON, &DateDiff::OnBnClickedDiffcalcButton)
 END_MESSAGE_MAP()
 
 #pragma warning( pop )
@@ -122,11 +123,11 @@ void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 
-	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
+	/*CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
 	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
 	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
 
-	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);
+	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);*/
 	*pResult = 0;
 }
 
@@ -135,11 +136,11 @@ void DateDiff::OnDtnDatetimechangeTodatePicker(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 
-	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
+	/*CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
 	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
 	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
 
-	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);
+	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);*/
 	*pResult = 0;
 }
 
@@ -148,6 +149,38 @@ BOOL DateDiff::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	CFont font;
+
+	font.CreateFont(
+		12,                        // nHeight
+		0,                         // nWidth
+		0,                         // nEscapement
+		0,                         // nOrientation
+		FW_NORMAL,                 // nWeight
+		FALSE,                     // bItalic
+		FALSE,                     // bUnderline
+		0,                         // cStrikeOut
+		ANSI_CHARSET,              // nCharSet
+		OUT_DEFAULT_PRECIS,        // nOutPrecision
+		CLIP_DEFAULT_PRECIS,       // nClipPrecision
+		DEFAULT_QUALITY,           // nQuality
+		DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
+		_T("Arial"));                 // lpszFacename
+
+	// Now you can use the font object with a static text control
+	GetDlgItem(IDC_DATEDIFF_OUTPUT)->SetFont(&font);
+
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
+}
+
+
+void DateDiff::OnBnClickedDiffcalcButton()
+{
+	CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
+	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
+	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
+
+	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);
 }

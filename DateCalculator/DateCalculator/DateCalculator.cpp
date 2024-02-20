@@ -183,10 +183,16 @@ namespace DateCalculator
             dayDiff = 0;
         }
 
+        // GET MONTH DIFFERENCE
+        monthDiff = dayDiff / 30.417;
+
+        // GET YEAR DIFFERENCE
+        yearDiff = dayDiff / 365;
+
         // Return the difference
         std::string dateDifference = "Years: " + std::to_string(yearDiff) +
-                                  ", Months: " + std::to_string(monthDiff) +
-                                    ", Days: " + std::to_string(dayDiff);
+                                  "\rMonths: " + std::to_string(monthDiff) +
+                                    "\rDays: " + std::to_string(dayDiff);
         return dateDifference;
     }
 
@@ -235,17 +241,17 @@ namespace DateCalculator
 
     void Date::AddYear(unsigned int yearsToAdd)
     {
-
+        UNREFERENCED_PARAMETER(yearsToAdd);
     }
 
     void Date::AddMonth(unsigned int monthsToAdd)
     {
-
+        UNREFERENCED_PARAMETER(monthsToAdd);
     }
 
     void Date::AddDay(unsigned int daysToAdd)
     {
-
+        UNREFERENCED_PARAMETER(daysToAdd);
     }
 }
 
