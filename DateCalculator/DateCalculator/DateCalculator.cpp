@@ -184,6 +184,13 @@ namespace DateCalculator
             days = 0;
         }
 
+        /*
+            FIXME: a better solution should be found to filter days into months and years while
+            taking notice of the following annomolys:
+            - leap years (the addition of 1 day about every 4 years).
+            - September of 1752 (aka. evil)
+        */
+
         // Calculate time difference (in days, months, years)
         yearDiff = days / 365;
         days %= 365;
@@ -193,13 +200,6 @@ namespace DateCalculator
         days %= 30;
 
         dayDiff = days;
-
-        /*
-            FIXME: a better solution should be found to filter days into months and years while
-            taking notice of the following annomolys:
-            - leap years (the addition of 1 day about every 4 years).
-            - September of 1752 (aka. evil)
-        */
 
         // Return the difference
         std::string dateDifference = "Years: " + std::to_string(yearDiff) +

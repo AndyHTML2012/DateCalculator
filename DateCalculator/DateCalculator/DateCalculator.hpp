@@ -3,7 +3,9 @@
 #include <string>
 #include <cstdint> // UINT32 incase platform only supports 
 
-#define MINIMUM_YEAR 1601
+//#define MINIMUM_YEAR 1601
+
+constexpr auto MINIMUM_YEAR = 1601;
 
 namespace DateCalculator
 {
@@ -26,7 +28,7 @@ namespace DateCalculator
     class Date
     {
     private:
-        unsigned int year_ = MINIMUM_YEAR;
+        unsigned int year_ = 1970;
         MONTH month_ = JAN;
         unsigned int day_ = 1;
 
