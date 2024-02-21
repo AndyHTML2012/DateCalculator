@@ -8,7 +8,6 @@
 #include "resource.h"
 #include <string>
 
-
 // DateDiff dialog
 
 IMPLEMENT_DYNAMIC(DateDiff, CDialogEx)
@@ -93,7 +92,7 @@ static std::wstring GetDateDifference(COleDateTime fromDateCtrl, COleDateTime to
 }
 
 /*!**************************************************************************************
- * @brief					Calculate & Update Date difference output
+ * @brief Calculate & Update Date difference output
  * @param fromDateCtrl
  * @param toDateCtrl 
  * @param DiffDateOutput 
@@ -143,7 +142,6 @@ void DateDiff::OnDtnDatetimechangeTodatePicker(NMHDR* pNMHDR, LRESULT* pResult)
 	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);*/
 	*pResult = 0;
 }
-
 
 BOOL DateDiff::OnInitDialog()
 {

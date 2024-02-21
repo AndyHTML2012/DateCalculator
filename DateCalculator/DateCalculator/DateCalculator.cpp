@@ -162,6 +162,7 @@ namespace DateCalculator
     // Get string data of the day, month, year difference between two dates
     std::string operator-(Date const& lhs, Date const& rhs)
     {
+        UINT32 days = 0;
         UINT32 dayDiff = 0;
         unsigned int monthDiff = 0;
         unsigned int yearDiff = 0;
@@ -172,22 +173,33 @@ namespace DateCalculator
         // DETERMINE WHICH YEAR COMES BEFORE AND COMES AFTER USING > OPERATOR
         if (lhs > rhs)
         {
-            dayDiff = (d1 - d2);
+            days = (d1 - d2);
         }
         else if (rhs > lhs)
         {
-            dayDiff = (d2 - d1);
+            days = (d2 - d1);
         }
         else
         {
-            dayDiff = 0;
+            days = 0;
         }
 
-        // GET MONTH DIFFERENCE
-        monthDiff = dayDiff / 30.417;
+        // Calculate time difference (in days, months, years)
+        yearDiff = days / 365;
+        days %= 365;
 
-        // GET YEAR DIFFERENCE
-        yearDiff = dayDiff / 365;
+        // FIXME: find more accurate way of filtering days to months without using magic number
+        monthDiff = days / 30;
+        days %= 30;
+
+        dayDiff = days;
+
+        /*
+            FIXME: a better solution should be found to filter days into months and years while
+            taking notice of the following annomolys:
+            - leap years (the addition of 1 day about every 4 years).
+            - September of 1752 (aka. evil)
+        */
 
         // Return the difference
         std::string dateDifference = "Years: " + std::to_string(yearDiff) +
