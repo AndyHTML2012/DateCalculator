@@ -2,6 +2,7 @@
 
 #include "DateCalculator.hpp"
 #include <iostream>
+#include <cmath>
 
 static bool Is_LeapYear(unsigned int year);
 
@@ -139,22 +140,34 @@ namespace DateCalculator
         return this->day_;
     }
 
-    UINT32 Date::getDaysFromMinimum() const
+    /*!
+     * @brief  Get total days from a MINIMUM YEAR
+     * @return 
+     */
+    UINT32 Date::getDaysFromMinimum(unsigned int yearToCountFrom) const
     {
         UINT32 days = 0;
 
+        static const int daysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
         // Add the number of days for each year up to the given year
-        for (unsigned int year = MINIMUM_YEAR; year < this->year_; ++year) {
-            days += year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) ? 366 : 365;
+        for (unsigned int y = yearToCountFrom; y < year_; ++y) 
+        {
+            days += ((y % 4 == 0 && y % 100 != 0) || (y % 400 == 0)) ? 366 : 365;
         }
 
         // Add the number of days for each month up to the given month in the given year
-        for (unsigned int month = 1; month < this->month_; ++month) {
-            days += this->daysInMonth;
+        for (unsigned int m = 1; m < month_; ++m) 
+        {
+            days += daysInMonth[m - 1];
+            if (m == 2 && this->isLeapYear) 
+            {
+                ++days;
+            }
         }
 
         // Add the day of the month
-        days += this->day_;
+        days += day_;
 
         return days;
     }
@@ -167,17 +180,21 @@ namespace DateCalculator
         unsigned int monthDiff = 0;
         unsigned int yearDiff = 0;
 
-        UINT32 d1 = lhs.getDaysFromMinimum();
-        UINT32 d2 = rhs.getDaysFromMinimum();
+        UINT32 d1 = lhs.getDaysFromMinimum(MINIMUM_YEAR);
+        UINT32 d2 = rhs.getDaysFromMinimum(MINIMUM_YEAR);
+
+        unsigned int currentYear = 0;
 
         // DETERMINE WHICH YEAR COMES BEFORE AND COMES AFTER USING > OPERATOR
         if (lhs > rhs)
         {
             days = (d1 - d2);
+            currentYear = lhs.year_;
         }
-        else if (rhs > lhs)
+        else if (rhs > lhs) // 2024 > 2020
         {
             days = (d2 - d1);
+            currentYear = rhs.year_;
         }
         else
         {
@@ -191,15 +208,33 @@ namespace DateCalculator
             - September of 1752 (aka. evil)
         */
 
-        // Calculate time difference (in days, months, years)
-        yearDiff = days / 365;
-        days %= 365;
+        unsigned int tempDays = days;
 
-        // FIXME: find more accurate way of filtering days to months without using magic number
-        monthDiff = days / 30;
-        days %= 30;
+        //// Calculate time difference (in days, months, years)
+        //yearDiff = tempDays / 365;
+        //tempDays %= 365;
 
-        dayDiff = days;
+        //// FIXME: find more accurate way of filtering days to months without using magic number
+        //monthDiff = tempDays / 30;
+        //tempDays %= 30;
+
+        for (; tempDays >= 365; ++yearDiff) 
+        {
+            tempDays -= 365;
+            if (currentYear > 1601 && Is_LeapYear(currentYear) == true) // FIXME: go to bed, this doesnt work and you know it
+            { 
+                if(tempDays != 0)
+                    tempDays--;
+            }
+            currentYear--;
+        }
+
+        for (; tempDays >= 30; ++monthDiff) 
+        {
+            tempDays -= 30;
+        }
+
+        dayDiff = tempDays;
 
         // Return the difference
         std::string dateDifference = "Years: " + std::to_string(yearDiff) +
@@ -286,6 +321,6 @@ static bool Is_LeapYear(unsigned int year)
         }
     }
     else {
-        return true;
+        return false;
     }
 }

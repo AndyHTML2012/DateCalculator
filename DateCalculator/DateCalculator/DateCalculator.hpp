@@ -43,7 +43,7 @@ namespace DateCalculator
         unsigned int GetDay() const;
 
         // gets days from minimum year (january 1st of that year).
-        UINT32 getDaysFromMinimum() const;
+        UINT32 getDaysFromMinimum(unsigned int yearToCountFrom) const;
 
         // Subtract one date from another to get a new date
         // Returns: formatted string of day, month, and year difference between both dates
