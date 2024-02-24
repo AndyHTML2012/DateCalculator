@@ -2,9 +2,11 @@
 
 #include "DateCalculator.hpp"
 #include <iostream>
+#include <vector>
 #include <cmath>
 
 static bool Is_LeapYear(unsigned int year);
+static unsigned int daysInMonth(unsigned int month, unsigned int year);
 
 /*!****************************************************************************
  * @brief           Exit function and set print error to console.
@@ -201,45 +203,57 @@ namespace DateCalculator
             days = 0;
         }
 
-        /*
-            FIXME: a better solution should be found to filter days into months and years while
-            taking notice of the following annomolys:
-            - leap years (the addition of 1 day about every 4 years).
-            - September of 1752 (aka. evil)
-        */
+        unsigned int currentTotal = days;
+        unsigned int startYear = 0;
+        unsigned int endYear = 0;
 
-        unsigned int tempDays = days;
-
-        //// Calculate time difference (in days, months, years)
-        //yearDiff = tempDays / 365;
-        //tempDays %= 365;
-
-        //// FIXME: find more accurate way of filtering days to months without using magic number
-        //monthDiff = tempDays / 30;
-        //tempDays %= 30;
-
-        for (; tempDays >= 365; ++yearDiff) 
+        if (lhs.year_ > rhs.year_)
         {
-            tempDays -= 365;
-            if (currentYear > 1601 && Is_LeapYear(currentYear) == true) // FIXME: go to bed, this doesnt work and you know it
-            { 
-                if(tempDays != 0)
-                    tempDays--;
+            startYear = rhs.year_;
+            endYear = lhs.year_;
+        }
+        else {
+            startYear = lhs.year_;
+            endYear = rhs.year_;
+        }
+
+        // Adjust for leap years and the actual number of days in each month
+        for (unsigned int year = startYear; year <= endYear; ++year) 
+        {
+            for (unsigned int month = 1; month <= 12; ++month) 
+            {
+                unsigned int days_this_month = daysInMonth(month, year);
+                if (currentTotal >= days_this_month)
+                {
+                    currentTotal -= days_this_month;
+                    if (month == 12) 
+                    {
+                        ++yearDiff;
+                        monthDiff = 0;
+                    }
+                    else 
+                    {
+                        ++monthDiff;
+                    }
+                }
+                else 
+                {
+                    currentTotal = 0;
+                    break;
+                }
             }
-            currentYear--;
+            if (currentTotal == 0)
+            {
+                break;
+            }
         }
 
-        for (; tempDays >= 30; ++monthDiff) 
-        {
-            tempDays -= 30;
-        }
-
-        dayDiff = tempDays;
+        dayDiff = currentTotal;
 
         // Return the difference
         std::string dateDifference = "Years: " + std::to_string(yearDiff) +
-                                  "\rMonths: " + std::to_string(monthDiff) +
-                                    "\rDays: " + std::to_string(dayDiff);
+                                  "\nMonths: " + std::to_string(monthDiff) +
+                                    "\nDays: " + std::to_string(dayDiff);
         return dateDifference;
     }
 
@@ -323,4 +337,19 @@ static bool Is_LeapYear(unsigned int year)
     else {
         return false;
     }
+}
+
+static unsigned int daysInMonth(unsigned int month, unsigned int year) 
+{
+    // Array of days in each month, assuming non-leap year
+    std::vector<unsigned int> days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    // If it's February and a leap year, return 29 days
+    if (month == 2 && Is_LeapYear(year)) 
+    {
+        return 29;
+    }
+
+    // Otherwise, return the number of days from the array
+    return days_in_month[month - 1];
 }
