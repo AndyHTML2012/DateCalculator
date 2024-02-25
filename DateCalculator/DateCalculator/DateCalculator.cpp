@@ -1,3 +1,11 @@
+/*!****************************************************************************
+ * @File             DateCalculator.cpp
+ * @Author           Andres Trujillo
+ * @Date             2/24/2024
+ * @Brief            This program for finding the difference between two dates
+                     and performing arithmetic operations on dates.
+******************************************************************************/
+
 #include "pch.h" // precompiled header required by visual studio
 
 #include "DateCalculator.hpp"
@@ -9,10 +17,7 @@
 static bool Is_LeapYear(unsigned int year);
 static unsigned int Days_InMonth(unsigned int month, unsigned int year);
 
-/*!****************************************************************************
- * @brief           Exit function and set print error to console.
- * @param errorMsg  Message to print (automatic newline handled by function)
-******************************************************************************/
+// Exit function and set print error to console.
 static void ThrowError(std::string errorMsg)
 {
     try
@@ -143,10 +148,6 @@ namespace DateCalculator
         return this->day_;
     }
 
-    /*!
-     * @brief  Get total days from a MINIMUM YEAR
-     * @return 
-     */
     UINT32 Date::getDaysFromMinimum(unsigned int yearToCountFrom) const
     {
         UINT32 days = 0;
@@ -411,9 +412,8 @@ namespace DateCalculator
         }
 
         // Check if day is valid for the new month, adjust if necessary
-
-        // Assume GetDaysInMonth() returns the number of days in a given month for a given year
         unsigned int daysInMonth = Days_InMonth(this->month_, this->year_);
+
         if (this->day_ > daysInMonth) 
         {
             this->day_ = daysInMonth;

@@ -1,9 +1,14 @@
+/*!****************************************************************************
+ * @File             DateCalculator.hpp
+ * @Author           Andres Trujillo
+ * @Date             2/24/2024
+ * @Brief            This program for finding the difference between two dates
+                     and performing arithmetic operations on dates.
+******************************************************************************/
 #pragma once
 
 #include <string>
-#include <cstdint> // UINT32 incase platform only supports 
-
-//#define MINIMUM_YEAR 1601
+#include <cstdint> // UINT32
 
 constexpr auto MINIMUM_YEAR = 1601;
 
@@ -25,6 +30,9 @@ namespace DateCalculator
         DEC = 12    // december
     };
 
+    /*!
+     * @brief Object that stores date and its relating information.
+     */
     class Date
     {
     private:
@@ -38,9 +46,9 @@ namespace DateCalculator
     public:
         Date(MONTH month = JAN, unsigned int day = 1, unsigned int year = 1970);
 
-        unsigned int GetYear() const;
-        MONTH GetMonth() const;
-        unsigned int GetDay() const;
+        unsigned int GetYear() const;                // Get Year
+        MONTH GetMonth() const;                      // Get Month
+        unsigned int GetDay() const;                 // Get Day
 
         // gets days from minimum year (january 1st of that year).
         UINT32 getDaysFromMinimum(unsigned int yearToCountFrom) const;
@@ -55,6 +63,7 @@ namespace DateCalculator
         // Is date1 == date2 ?
         friend bool operator==(Date const& lhs, Date const& rhs);
 
+        // Copy Assign date
         Date& operator=(Date const& rhs);
 
         void AddYears(unsigned int yearsToAdd);      // add years to date
