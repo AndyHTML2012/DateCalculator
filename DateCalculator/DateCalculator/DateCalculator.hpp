@@ -55,8 +55,14 @@ namespace DateCalculator
         // Is date1 == date2 ?
         friend bool operator==(Date const& lhs, Date const& rhs);
 
-        void AddYear(unsigned int yearsToAdd);      // add years to date
-        void AddMonth(unsigned int monthsToAdd);    // add months to date
-        void AddDay(unsigned int daysToAdd);        // add days to date
+        Date& operator=(Date const& rhs);
+
+        void AddYears(unsigned int yearsToAdd);      // add years to date
+        void AddMonths(unsigned int monthsToAdd);    // add months to date
+        void AddDays(unsigned int daysToAdd);        // add days to date
+
+        void SubYears(unsigned int yearsToSub);      // sub years from date
+        void SubMonths(unsigned int monthsToSub);    // sub months from date
+        void SubDays(unsigned int daysToSub);        // sub days from date
     };
 }

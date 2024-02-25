@@ -121,12 +121,6 @@ static void UpdateDiffOutput(CDateTimeCtrl* fromDateCtrl, CDateTimeCtrl* toDateC
 void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-
-	/*CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
-	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
-	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
-
-	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);*/
 	*pResult = 0;
 }
 
@@ -134,12 +128,6 @@ void DateDiff::OnDtnDatetimechangeFromdatePicker(NMHDR* pNMHDR, LRESULT* pResult
 void DateDiff::OnDtnDatetimechangeTodatePicker(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-
-	/*CDateTimeCtrl* fromDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_FROMDATE_PICKER);
-	CDateTimeCtrl* toDateCtrl = (CDateTimeCtrl*)GetDlgItem(IDC_TODATE_PICKER);
-	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
-
-	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);*/
 	*pResult = 0;
 }
 
@@ -181,4 +169,11 @@ void DateDiff::OnBnClickedDiffcalcButton()
 	CStatic* DiffDateOutput = (CStatic*)GetDlgItem(IDC_DATEDIFF_OUTPUT);
 
 	UpdateDiffOutput(fromDateCtrl, toDateCtrl, DiffDateOutput);
+}
+
+
+void DateDiff::OnOK()
+{
+	//CDialogEx::OnOK();
+	return;
 }

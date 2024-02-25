@@ -27,4 +27,5 @@ public:
 	afx_msg void OnDtnDatetimechangeTodatePicker(NMHDR* pNMHDR, LRESULT* pResult);
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedDiffcalcButton();
+	virtual void OnOK();
 };

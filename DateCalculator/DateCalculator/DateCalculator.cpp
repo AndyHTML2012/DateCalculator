@@ -3,10 +3,11 @@
 #include "DateCalculator.hpp"
 #include <iostream>
 #include <vector>
+#include <array>
 #include <cmath>
 
 static bool Is_LeapYear(unsigned int year);
-static unsigned int daysInMonth(unsigned int month, unsigned int year);
+static unsigned int Days_InMonth(unsigned int month, unsigned int year);
 
 /*!****************************************************************************
  * @brief           Exit function and set print error to console.
@@ -222,7 +223,7 @@ namespace DateCalculator
         {
             for (unsigned int month = 1; month <= 12; ++month) 
             {
-                unsigned int days_this_month = daysInMonth(month, year);
+                unsigned int days_this_month = Days_InMonth(month, year);
                 if (currentTotal >= days_this_month)
                 {
                     currentTotal -= days_this_month;
@@ -300,19 +301,160 @@ namespace DateCalculator
         return false;
     }
 
-    void Date::AddYear(unsigned int yearsToAdd)
+    Date& Date::operator=(Date const& rhs)
     {
-        UNREFERENCED_PARAMETER(yearsToAdd);
+        if (&rhs == this)
+        {
+            return *this;
+        }
+        else
+        {
+            this->year_ = rhs.GetYear();
+            this->month_ = rhs.GetMonth();
+            this->day_ = rhs.GetDay();
+            this->isLeapYear = Is_LeapYear(this->year_);
+            this->daysInMonth = Days_InMonth(this->month_, this->year_);
+
+            return *this;
+        }
     }
 
-    void Date::AddMonth(unsigned int monthsToAdd)
+    void Date::AddYears(unsigned int yearsToAdd)
     {
-        UNREFERENCED_PARAMETER(monthsToAdd);
+        this->year_ += yearsToAdd;
     }
 
-    void Date::AddDay(unsigned int daysToAdd)
+    void Date::AddMonths(unsigned int monthsToAdd)
     {
-        UNREFERENCED_PARAMETER(daysToAdd);
+        std::array<MONTH, 12> months = {JAN, FEB, MAR, APR, MAY, JNE, JLY, AUG, SEP, OCT, NOV, DEC};
+        unsigned int yearsToAdd = 0;
+
+        for (int i = 0; (monthsToAdd / 12) >= 1; ++i)
+        {
+            yearsToAdd++;
+            monthsToAdd -= 12;
+        }
+
+        this->AddYears(yearsToAdd);
+        MONTH startMonth = this->month_;
+        MONTH currentMonth = startMonth;
+
+        for (int m = 0; m < monthsToAdd; ++m)
+        {
+            if (currentMonth == DEC)
+            {
+                this->AddYears(1);
+                currentMonth = months[0];
+            }
+            else if (currentMonth < DEC)
+            {
+                currentMonth = months[currentMonth];
+            }
+        }
+
+        this->month_ = currentMonth;
+    }
+
+    void Date::AddDays(unsigned int daysToAdd)
+    {
+        while (daysToAdd > 0) 
+        {
+            unsigned int daysInCurrentMonth = Days_InMonth(this->month_, this->year_);
+            if (this->day_ + daysToAdd <= daysInCurrentMonth)
+            {
+                this->day_ += daysToAdd;
+                daysToAdd = 0;
+            }
+            else 
+            {
+                daysToAdd -= (daysInCurrentMonth - this->day_ + 1);
+                this->day_ = 1;
+                AddMonths(1);
+            }
+
+            // Special case for dates removed in September 1752
+            if (this->year_ == 1752 && this->month_ == SEP)
+            {
+                if (this->day_ < 14)
+                {
+                    this->day_ = 14;
+                }
+            }
+        }
+    }
+
+    void Date::SubYears(unsigned int yearsToSub)
+    {
+        for (unsigned int i = 0; (i < yearsToSub) && (this->year_ > 0); ++i)
+        {
+            this->year_--;
+        }
+    }
+
+    void Date::SubMonths(unsigned int monthsToSub)
+    {
+        std::array<MONTH, 12> months = { JAN, FEB, MAR, APR, MAY, JNE, JLY, AUG, SEP, OCT, NOV, DEC };
+
+        while (monthsToSub > 0)
+        {
+            if (monthsToSub >= this->month_)
+            {
+                monthsToSub -= this->month_;
+                this->month_ = DEC;
+                this->SubYears(1);
+            }
+            else 
+            {
+                this->month_ = static_cast<MONTH>(this->month_ - monthsToSub);
+                monthsToSub = 0;
+            }
+        }
+
+        // Check if day is valid for the new month, adjust if necessary
+
+        // Assume GetDaysInMonth() returns the number of days in a given month for a given year
+        unsigned int daysInMonth = Days_InMonth(this->month_, this->year_);
+        if (this->day_ > daysInMonth) 
+        {
+            this->day_ = daysInMonth;
+        }
+    }
+
+    void Date::SubDays(unsigned int daysToSub)
+    {
+        while (daysToSub > 0)
+        {
+            if (daysToSub >= this->day_)
+            {
+                daysToSub -= this->day_;
+                SubMonths(1);
+                day_ = Days_InMonth(this->month_, this->year_);
+            }
+            else
+            {
+                this->day_ -= daysToSub;
+                daysToSub = 0;
+            }
+
+            // Special case for dates removed in September 1752
+            if (this->year_ == 1752 && this->month_ == 9)
+            {
+                if (this->day_ > 2 && this->day_ < 14)
+                {
+                    // If subtracting days crosses the missing dates, adjust accordingly
+                    if (daysToSub >= this->day_ - 2)
+                    {
+                        daysToSub -= (this->day_ - 2);
+                        this->day_ = 2;
+                    }
+                    else 
+                    {
+                        this->day_ -= daysToSub;
+                        daysToSub = 0;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -339,7 +481,7 @@ static bool Is_LeapYear(unsigned int year)
     }
 }
 
-static unsigned int daysInMonth(unsigned int month, unsigned int year) 
+static unsigned int Days_InMonth(unsigned int month, unsigned int year) 
 {
     // Array of days in each month, assuming non-leap year
     std::vector<unsigned int> days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };

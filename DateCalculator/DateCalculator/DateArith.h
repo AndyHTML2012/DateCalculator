@@ -1,6 +1,7 @@
 #pragma once
 #include "afxdialogex.h"
 #include "DateCalculator.hpp"
+#include <string>
 
 // DateArith dialog
 
@@ -42,4 +43,8 @@ private:
 	unsigned int days_ = 0;
 	unsigned int months_ = 0;
 	unsigned int years_ = 0;
+	std::wstring output_;
+public:
+	afx_msg void OnBnClickedArithcalcButton();
+	virtual void OnOK();
 };
